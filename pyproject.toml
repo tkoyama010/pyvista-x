@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyvista-x"
+version = "0.1.0"
+description = "A library that provides switching between multiple PyVista backends"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+authors = [
+    {name = "pyvista-x contributors"},
+]
+keywords = ["pyvista", "visualization", "3d", "backend", "pyodide", "wasm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "pyvista",
+]
+
+[project.optional-dependencies]
+js = ["pyvista-js"]
+wasm = ["pyvista-wasm"]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "black",
+    "ruff",
+    "mypy",
+]
+
+[project.urls]
+Homepage = "https://github.com/tetsuo-koyama/pyvista-x"
+Repository = "https://github.com/tetsuo-koyama/pyvista-x"
+Issues = "https://github.com/tetsuo-koyama/pyvista-x/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyvista_x"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38']
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "W", "I", "N", "D", "UP", "B", "C4", "SIM"]
+ignore = ["D100", "D104"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--cov=pyvista_x --cov-report=term-missing"
