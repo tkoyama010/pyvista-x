@@ -26,7 +26,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Visualization",
 ]
 dependencies = [
-    "pyvista",
+    "pyvista; platform_machine != 'wasm32' and sys_platform != 'emscripten'",
 ]
 
 [project.optional-dependencies]
