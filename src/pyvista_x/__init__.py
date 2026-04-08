@@ -8,7 +8,7 @@ This module automatically selects the appropriate backend based on the environme
 
 import sys
 import types
-from typing import Any, List
+from typing import Any
 
 
 def _is_wasm_environment() -> bool:
@@ -70,7 +70,7 @@ def __getattr__(name: str) -> Any:
     return getattr(_pv, name)
 
 
-def __dir__() -> List[str]:
+def __dir__() -> list[str]:
     """Return list of available attributes."""
     return sorted(set(dir(_pv) + list(globals().keys())))
 
