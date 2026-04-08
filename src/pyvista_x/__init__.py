@@ -26,7 +26,7 @@ def _load_backend() -> types.ModuleType:
         try:
             import pyvista_js
 
-            return pyvista_js
+            return pyvista_js  # type: ignore[no-any-return]
         except ImportError as e:
             errors.append(f"pyvista-js: {e}")
 
@@ -34,7 +34,7 @@ def _load_backend() -> types.ModuleType:
         try:
             import pyvista_wasm
 
-            return pyvista_wasm
+            return pyvista_wasm  # type: ignore[no-any-return]
         except ImportError as e:
             errors.append(f"pyvista-wasm: {e}")
 
@@ -42,7 +42,7 @@ def _load_backend() -> types.ModuleType:
     try:
         import pyvista
 
-        return pyvista
+        return pyvista  # type: ignore[no-any-return]
     except ImportError as e:
         errors.append(f"pyvista: {e}")
 
