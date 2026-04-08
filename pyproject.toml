@@ -41,9 +41,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/tetsuo-koyama/pyvista-x"
-Repository = "https://github.com/tetsuo-koyama/pyvista-x"
-Issues = "https://github.com/tetsuo-koyama/pyvista-x/issues"
+Homepage = "https://github.com/tkoyama010/pyvista-x"
+Repository = "https://github.com/tkoyama010/pyvista-x"
+Issues = "https://github.com/tkoyama010/pyvista-x/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pyvista_x"]
