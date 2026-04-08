@@ -57,9 +57,12 @@ class TestRealWorldScenarios:
         mock_wasm.Plotter = MagicMock
         mock_wasm.read = MagicMock()
 
-        with patch("sys.platform", "emscripten"), patch.dict(
-            "sys.modules",
-            {"pyvista_js": mock_js, "pyvista_wasm": mock_wasm},
+        with (
+            patch("sys.platform", "emscripten"),
+            patch.dict(
+                "sys.modules",
+                {"pyvista_js": mock_js, "pyvista_wasm": mock_wasm},
+            ),
         ):
             modules_to_remove = [k for k in sys.modules if k.startswith("pyvista_x")]
             for mod in modules_to_remove:
@@ -79,9 +82,12 @@ class TestRealWorldScenarios:
         mock_pv.read = MagicMock()
 
         # Mock both WASM backends to raise ImportError to test fallback to pyvista
-        with patch("sys.platform", "emscripten"), patch.dict(
-            "sys.modules",
-            {"pyvista": mock_pv, "pyvista_js": None, "pyvista_wasm": None},
+        with (
+            patch("sys.platform", "emscripten"),
+            patch.dict(
+                "sys.modules",
+                {"pyvista": mock_pv, "pyvista_js": None, "pyvista_wasm": None},
+            ),
         ):
             modules_to_remove = [k for k in sys.modules if k.startswith("pyvista_x")]
             for mod in modules_to_remove:

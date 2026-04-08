@@ -81,9 +81,12 @@ class TestBackendLoading:
 
     def test_loads_pyvista_js_in_wasm_first(self, mock_pyvista_js):
         """Test that pyvista_js is tried first in WASM environment."""
-        with patch("sys.platform", "emscripten"), patch.dict(
-            "sys.modules",
-            {"pyvista_js": mock_pyvista_js},
+        with (
+            patch("sys.platform", "emscripten"),
+            patch.dict(
+                "sys.modules",
+                {"pyvista_js": mock_pyvista_js},
+            ),
         ):
             import importlib
 
@@ -95,9 +98,12 @@ class TestBackendLoading:
     def test_loads_pyvista_wasm_when_js_unavailable(self, mock_pyvista_wasm):
         """Test fallback to pyvista_wasm when pyvista_js is not available."""
         # Mock pyvista_js to None to force ImportError and test fallback to pyvista_wasm
-        with patch("sys.platform", "emscripten"), patch.dict(
-            "sys.modules",
-            {"pyvista_js": None, "pyvista_wasm": mock_pyvista_wasm},
+        with (
+            patch("sys.platform", "emscripten"),
+            patch.dict(
+                "sys.modules",
+                {"pyvista_js": None, "pyvista_wasm": mock_pyvista_wasm},
+            ),
         ):
             import importlib
 
@@ -109,9 +115,12 @@ class TestBackendLoading:
     def test_raises_error_when_no_backend_available(self):
         """Test that ImportError is raised when no backend can be loaded."""
         # Mock all backends to None to force ImportError
-        with patch("sys.platform", "linux"), patch.dict(
-            "sys.modules",
-            {"pyvista": None, "pyvista_js": None, "pyvista_wasm": None},
+        with (
+            patch("sys.platform", "linux"),
+            patch.dict(
+                "sys.modules",
+                {"pyvista": None, "pyvista_js": None, "pyvista_wasm": None},
+            ),
         ):
             with pytest.raises(ImportError) as exc_info:
                 import importlib
@@ -124,9 +133,12 @@ class TestBackendLoading:
 
     def test_fallback_to_standard_pyvista_in_wasm(self, mock_pyvista):
         """Test that standard pyvista is used in WASM if JS backends unavailable."""
-        with patch("sys.platform", "emscripten"), patch.dict(
-            "sys.modules",
-            {"pyvista": mock_pyvista, "pyvista_js": None, "pyvista_wasm": None},
+        with (
+            patch("sys.platform", "emscripten"),
+            patch.dict(
+                "sys.modules",
+                {"pyvista": mock_pyvista, "pyvista_js": None, "pyvista_wasm": None},
+            ),
         ):
             import importlib
 

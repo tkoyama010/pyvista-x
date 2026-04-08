@@ -32,9 +32,9 @@ jobs:
       run: |
         ruff check src/pyvista_x tests
 
-    - name: Format check with black
+    - name: Format check with ruff
       run: |
-        black --check src/pyvista_x tests
+        ruff format --check src/pyvista_x tests
 
     - name: Type check with mypy
       run: |
