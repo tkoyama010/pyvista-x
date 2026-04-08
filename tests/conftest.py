@@ -1,8 +1,7 @@
 """Test configuration and fixtures for pyvista_x tests."""
 
 import sys
-import types
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -68,12 +67,20 @@ def mock_pyvista_wasm():
 
 @pytest.fixture
 def clean_module_cache():
-    """Remove pyvista_x from sys.modules to ensure fresh imports."""
-    modules_to_remove = [key for key in sys.modules.keys() if key.startswith("pyvista_x")]
+    """Remove pyvista_x and backend modules from sys.modules to ensure fresh imports."""
+    # Remove pyvista_x modules
+    modules_to_remove = [key for key in sys.modules if key.startswith("pyvista_x")]
+    # Also remove backend modules to ensure mocks are used
+    backend_modules = ["pyvista", "pyvista_js", "pyvista_wasm"]
+    for mod in list(sys.modules.keys()):
+        if any(mod.startswith(backend) for backend in backend_modules):
+            modules_to_remove.append(mod)
     for mod in modules_to_remove:
-        del sys.modules[mod]
+        if mod in sys.modules:
+            del sys.modules[mod]
     yield
     # Cleanup after test
-    modules_to_remove = [key for key in sys.modules.keys() if key.startswith("pyvista_x")]
+    modules_to_remove = [key for key in sys.modules if key.startswith("pyvista_x")]
     for mod in modules_to_remove:
-        del sys.modules[mod]
+        if mod in sys.modules:
+            del sys.modules[mod]

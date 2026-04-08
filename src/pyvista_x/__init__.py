@@ -24,25 +24,25 @@ def _load_backend() -> types.ModuleType:
     if _is_wasm_environment():
         # Try pyvista-js first (JavaScript backend)
         try:
-            import pyvista_js as pv
+            import pyvista_js
 
-            return pv
+            return pyvista_js
         except ImportError as e:
             errors.append(f"pyvista-js: {e}")
 
         # Try pyvista-wasm next (WebAssembly backend)
         try:
-            import pyvista_wasm as pv
+            import pyvista_wasm
 
-            return pv
+            return pyvista_wasm
         except ImportError as e:
             errors.append(f"pyvista-wasm: {e}")
 
     # Try standard pyvista (desktop/backend)
     try:
-        import pyvista as pv
+        import pyvista
 
-        return pv
+        return pyvista
     except ImportError as e:
         errors.append(f"pyvista: {e}")
 

@@ -31,7 +31,7 @@ class TestRealWorldScenarios:
         with patch("sys.platform", "linux"):
             with patch.dict("sys.modules", {"pyvista": mock_pv}):
                 # Remove pyvista_x from cache to ensure fresh import
-                modules_to_remove = [k for k in sys.modules.keys() if k.startswith("pyvista_x")]
+                modules_to_remove = [k for k in sys.modules if k.startswith("pyvista_x")]
                 for mod in modules_to_remove:
                     del sys.modules[mod]
 
@@ -57,19 +57,18 @@ class TestRealWorldScenarios:
         mock_wasm.Plotter = MagicMock
         mock_wasm.read = MagicMock()
 
-        with patch("sys.platform", "emscripten"):
-            with patch.dict(
-                "sys.modules",
-                {"pyvista_js": mock_js, "pyvista_wasm": mock_wasm},
-            ):
-                modules_to_remove = [k for k in sys.modules.keys() if k.startswith("pyvista_x")]
-                for mod in modules_to_remove:
-                    del sys.modules[mod]
+        with patch("sys.platform", "emscripten"), patch.dict(
+            "sys.modules",
+            {"pyvista_js": mock_js, "pyvista_wasm": mock_wasm},
+        ):
+            modules_to_remove = [k for k in sys.modules if k.startswith("pyvista_x")]
+            for mod in modules_to_remove:
+                del sys.modules[mod]
 
-                import pyvista_x as pv
+            import pyvista_x as pv
 
-                # Should prefer pyvista_js over pyvista_wasm
-                assert pv.__backend__ == "pyvista_js"
+            # Should prefer pyvista_js over pyvista_wasm
+            assert pv.__backend__ == "pyvista_js"
 
     def test_graceful_fallback_in_wasm(self):
         """Test graceful fallback to standard pyvista when JS backends fail."""
@@ -79,36 +78,37 @@ class TestRealWorldScenarios:
         mock_pv.Plotter = MagicMock
         mock_pv.read = MagicMock()
 
-        with patch("sys.platform", "emscripten"):
-            with patch.dict("sys.modules", {"pyvista": mock_pv}):
-                modules_to_remove = [k for k in sys.modules.keys() if k.startswith("pyvista_x")]
-                for mod in modules_to_remove:
-                    del sys.modules[mod]
+        # Mock both WASM backends to raise ImportError to test fallback to pyvista
+        with patch("sys.platform", "emscripten"), patch.dict(
+            "sys.modules",
+            {"pyvista": mock_pv, "pyvista_js": None, "pyvista_wasm": None},
+        ):
+            modules_to_remove = [k for k in sys.modules if k.startswith("pyvista_x")]
+            for mod in modules_to_remove:
+                del sys.modules[mod]
 
-                import pyvista_x as pv
+            import pyvista_x as pv
 
-                # Should fallback to standard pyvista
-                assert pv.__backend__ == "pyvista"
+            # Should fallback to standard pyvista
+            assert pv.__backend__ == "pyvista"
 
     def test_error_message_on_complete_failure(self):
         """Test that error message is helpful when no backends available."""
+        # Mock all backends to None to force ImportError
         with patch("sys.platform", "linux"):
-            # Clear all pyvista-related modules
-            modules_to_clear = {
-                k: v
-                for k, v in sys.modules.items()
-                if k not in ["pyvista", "pyvista_js", "pyvista_wasm"]
-            }
-
-            with patch.dict("sys.modules", modules_to_clear, clear=True):
-                modules_to_remove = [k for k in sys.modules.keys() if k.startswith("pyvista_x")]
+            with patch.dict(
+                "sys.modules",
+                {"pyvista": None, "pyvista_js": None, "pyvista_wasm": None},
+            ):
+                modules_to_remove = [k for k in sys.modules if k.startswith("pyvista_x")]
                 for mod in modules_to_remove:
                     if mod in sys.modules:
                         del sys.modules[mod]
 
                 with pytest.raises(ImportError) as exc_info:
-                    import pyvista_x
                     import importlib
+
+                    import pyvista_x
 
                     importlib.reload(pyvista_x)
 
