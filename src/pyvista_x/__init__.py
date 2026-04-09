@@ -57,11 +57,34 @@ def _load_backend() -> types.ModuleType:
 # Load the appropriate backend
 _pv = _load_backend()
 
+# Common attributes that should be available from backends
+# Access these via __getattr__ below to avoid lazy_loader timing issues
+_COMMON_ATTRS = [
+    "Plotter",
+    "read",
+    "wrap",
+    "Actor",
+    "UnstructuredGrid",
+    "PolyData",
+    "StructuredGrid",
+    "RectilinearGrid",
+    "MultiBlock",
+    "Texture",
+    "Light",
+    "Camera",
+    "Color",
+]
+
 # Re-export all public attributes from the loaded backend
 __all__ = getattr(_pv, "__all__", [])
 if not __all__:
     # If __all__ is not defined, export all non-private attributes
     __all__ = [name for name in dir(_pv) if not name.startswith("_")]
+
+# Ensure common attributes are included in __all__ for documentation
+for _attr in _COMMON_ATTRS:
+    if _attr not in __all__:
+        __all__.append(_attr)
 
 
 # Dynamically re-export all attributes from the backend module
@@ -72,24 +95,8 @@ def __getattr__(name: str) -> Any:
 
 def __dir__() -> list[str]:
     """Return list of available attributes."""
-    return sorted(set(dir(_pv) + list(globals().keys())))
+    return sorted(set(dir(_pv) + list(globals().keys()) + _COMMON_ATTRS))
 
-
-# Explicitly re-export commonly used functions and classes
-# These will be available when doing: import pyvista_x as pv
-Plotter = _pv.Plotter
-read = _pv.read
-wrap = _pv.wrap
-Actor = _pv.Actor
-UnstructuredGrid = _pv.UnstructuredGrid
-PolyData = _pv.PolyData
-StructuredGrid = _pv.StructuredGrid
-RectilinearGrid = _pv.RectilinearGrid
-MultiBlock = _pv.MultiBlock
-Texture = _pv.Texture
-Light = _pv.Light
-Camera = _pv.Camera
-Color = _pv.Color
 
 # Version info
 __version__ = "0.2.0"
