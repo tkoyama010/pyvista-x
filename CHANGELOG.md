@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/tkoyama010/pyvista-x/compare/pyvista-x-v0.2.0...pyvista-x-v0.2.1) (2026-04-09)
+
+
+### Bug Fixes
+
+* defer backend attribute access to avoid lazy_loader timing issues ([#8](https://github.com/tkoyama010/pyvista-x/issues/8)) ([2d50e81](https://github.com/tkoyama010/pyvista-x/commit/2d50e8150a02aaea4a9995ada867c22266553fcf))
+
 ## [0.2.0](https://github.com/tkoyama010/pyvista-x/compare/pyvista-x-v0.1.0...pyvista-x-v0.2.0) (2026-04-09)
 
 

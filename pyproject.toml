@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyvista-x"
-version = "0.2.0"
+version = "0.2.1"
 description = "A library that provides switching between multiple PyVista backends"
 readme = "README.md"
 license = {text = "MIT"}
