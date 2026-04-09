@@ -99,5 +99,5 @@ def __dir__() -> list[str]:
 
 
 # Version info
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __backend__ = _pv.__name__
