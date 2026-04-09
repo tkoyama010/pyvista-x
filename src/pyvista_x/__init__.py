@@ -92,5 +92,5 @@ Camera = _pv.Camera
 Color = _pv.Color
 
 # Version info
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __backend__ = _pv.__name__
