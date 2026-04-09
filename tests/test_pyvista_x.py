@@ -157,7 +157,7 @@ class TestModuleExports:
             import pyvista_x
 
             assert hasattr(pyvista_x, "__version__")
-            assert pyvista_x.__version__ == "0.2.0"
+            assert pyvista_x.__version__ == "0.2.1"
 
     def test_backend_info_is_defined(self, mock_pyvista, clean_module_cache):
         """Test that __backend__ is defined."""
